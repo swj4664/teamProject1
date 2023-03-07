@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://code.jquery.com/jquery-latest.js"></script> 
+    <script src="./js/slide.js"></script>
+    <title>Document</title>
+    <style>
+        .slide {
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 300vw;
+            /* height: 1080px; */
+            overflow: hidden;
+            transition: all .5s;
+        }
+
+        .container .inner {
+            width: 100vw;
+            float: left;
+        }
+
+        .container .inner img {
+            width: 100%;
+        }
+
+        /* .on {
+            transform: translate(-100vw);
+        } */
+    </style>
+</head>
+
+<body style="margin:0">
+    <div class="slide">
+        <div class="container">
+            <div class="inner"><img src="./img/11.jpg" alt=""></div>
+            <div class="inner"><img src="./img/12.jpg" alt=""></div>
+            <div class="inner"><img src="./img/13.jpg" alt=""></div>
+        </div>
+    </div>
+
+    <button id="pre" type="button">pre</button>
+    <button id="next" type="button">next</button>
+
+    <script>
+
+            let slideAdd = '' // 5.버튼 속성 담는 그릇
+            let btnNum = [] // 2.버튼 갯수를 받을 배열
+            let btnCount = 4 // 1.버튼 갯수 설정
+
+            function a() { // 3.버튼 갯수 배열에 넣는 공식
+                for (let i = 0; i < btnCount; i++) {
+                    let Num = [i]
+                    btnNum.push(Num) // 4.하나씩 준비된 btnNum배열 변수에 넣는다.
+                }
+            } a()
+
+            btnNum.map((value) => { // 6.btnNum배열에 있는 값을 활용해 하나씩 준비된 '객체를 담는 변수slideAdd'에 차례로 넣는다.
+                slideAdd += `<button class="btn btn${value}" value="${value}" type="button">넘기기${value}</button>`
+            })
+            $('#pre').after(slideAdd) // 7. 해당속성 바로 뒤에 추가
+
+            $('.btn').click(function(){ // 8. 클릭한 버튼의 value가져오기
+                let btnNum = $(this).val()
+                slideStart(btnNum) // 9. slideStart함수로 btnNum값 넘기기
+            })
+
+            function slideStart(receiveNum){ // 10. 받은 btnNum값으로 슬라이드 실행함수 만들기
+                document.querySelector('.container').style.transform
+                = `translate(-${receiveNum*100}vw)` // 11. 만약 0번버튼을 누르면 0값이 receiveNum에 들어와 -100vw가 실행이 된다.
+            }
+
+    </script>
+</body>
+
+</html>
