@@ -18,18 +18,22 @@ function panTo(a, b) {
 
 // 화면에 마커를 표시하는 함수
 var markers = [];
+// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+var bounds = new kakao.maps.LatLngBounds();    
 function addMarker(position) {
     var marker = new kakao.maps.Marker({
         position: position
     });
-    console.log(marker)
     marker.setMap(map);
     markers.push(marker);
 }
 
+var marker
 function setMarkers(map) {
     for (var i = 0; i < markers.length; i++) {
+        // marker = new kakao.maps.Marker({ position : markers[i] });
         markers[i].setMap(map);
+        // bounds.extend(markers[i]);
     }
 }
 
@@ -42,8 +46,8 @@ function hideMarkers() {
 }
 
 
-// ------------------------------------
 
+// ---------------------------------------------------
 
 
 var global = []
@@ -86,45 +90,6 @@ function cityMarker2(city) {
 }
 
 
-
-// ---------------------------------------------------
-
-// 버튼을 클릭하면 아래 배열의 좌표들이 모두 보이게 지도 범위를 재설정합니다 
-
-
-// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
-// var bounds = new kakao.maps.LatLngBounds();    
-
-// var i, marker;
-// for (i = 0; i < points.length; i++) {
-//     // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
-//     marker =     new kakao.maps.Marker({ position : points[i] });
-//     marker.setMap(map);
-    
-//     // LatLngBounds 객체에 좌표를 추가합니다
-//     bounds.extend(points[i]);
-// }
-
-// function setBounds() {
-//     // LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
-//     // 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
-//     map.setBounds(bounds);
-// }
-
-
-// ---------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
 // 시도명을 인수로 받아 구군셀렉트를 나타내는 함수선언
 function sebu(city) {   
     let sebuList = []
@@ -149,7 +114,7 @@ function sebu(city) {
     sebuIndex.sort()
 
     sebuIndex.map((a)=> {
-        option = `<option>전체</option>`
+        option += `<option value="${a}">전체</option>`
     })
 
     sebuIndex.map((a)=> {
@@ -157,16 +122,20 @@ function sebu(city) {
     })
 
     map.setLevel(12)
-   
     panTo(cityList[0].lat, cityList[0].lng)
     $('#detail').html(option)
-    $('#detail').html(option).change(()=>{
-        map.setLevel(11)
-        panTo(cityList[0].lat, cityList[0].lng)
-    })
-    
-
 }
+
+
+function sebuMove(city){
+    let cityList = global.filter((a) => {
+        let sidoList = a.sidoName.split(' ')
+        if(sidoList[0] === city){
+            return sidoList
+        }
+    })
+}
+
 
 
 // 시도 목록을 button 상자에 표시하는 함수
@@ -184,7 +153,6 @@ function useData(globalData) {
     cityIndex.map((value) => {
         button += `<button id="btnn" type="button" value="${value}">${value}</button>`
     })
-
     $('#btn').html(button)
 }
 
@@ -194,7 +162,14 @@ $('#detail').change(function () {
     hideMarkers()   // 선택을 변경했을때 표시된 마커 숨기기
     let city = $(this).val()    // 선택된 시도명을 추출해서
     cityMarker2(city)   // 마커를 표시하는 함수를 호출문에 넣어줌
+    sebuMove(city)
 })
+
+$('#detail').children("option:selected").click(function () {
+    alert('asdfasdf');
+})
+
+
 
 $('#btn').click((e) => {
     hideMarkers()
