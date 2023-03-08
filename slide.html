@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://code.jquery.com/jquery-latest.js"></script> 
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="./js/slide.js"></script>
     <title>Document</title>
     <style>
@@ -15,8 +15,7 @@
         }
 
         .container {
-            width: 300vw;
-            /* height: 1080px; */
+            height: 50vw;
             overflow: hidden;
             transition: all .5s;
         }
@@ -30,9 +29,9 @@
             width: 100%;
         }
 
-        /* .on {
-            transform: translate(-100vw);
-        } */
+        .btn.on {
+            background-color: yellow;
+        }
     </style>
 </head>
 
@@ -42,6 +41,7 @@
             <div class="inner"><img src="./img/11.jpg" alt=""></div>
             <div class="inner"><img src="./img/12.jpg" alt=""></div>
             <div class="inner"><img src="./img/13.jpg" alt=""></div>
+            <div class="inner"><img src="./img/14.jpg" alt=""></div>
         </div>
     </div>
 
@@ -49,33 +49,74 @@
     <button id="next" type="button">next</button>
 
     <script>
+        let slideAdd = '' // 버튼 속성 담는 그릇
+        let btnArr = [] // 2. 버튼 갯수를 받을 배열
+        let btnCount = 4 // 1. 버튼 갯수 설정
 
-            let slideAdd = '' // 5.버튼 속성 담는 그릇
-            let btnNum = [] // 2.버튼 갯수를 받을 배열
-            let btnCount = 4 // 1.버튼 갯수 설정
+        // container길이 설정
+        document.querySelector('.container').style.width = `${btnCount * 100}vw`
 
-            function a() { // 3.버튼 갯수 배열에 넣는 공식
-                for (let i = 0; i < btnCount; i++) {
-                    let Num = [i]
-                    btnNum.push(Num) // 4.하나씩 준비된 btnNum배열 변수에 넣는다.
-                }
-            } a()
+        // 버튼 갯수 배열에 넣는 공식
+        for (let i = 0; i < btnCount; i++) {
+            let Num = [i]
+            btnArr.push(Num) // 하나씩 준비된 btnNum배열 변수에 넣는다.
+        }
 
-            btnNum.map((value) => { // 6.btnNum배열에 있는 값을 활용해 하나씩 준비된 '객체를 담는 변수slideAdd'에 차례로 넣는다.
-                slideAdd += `<button class="btn btn${value}" value="${value}" type="button">넘기기${value}</button>`
-            })
-            $('#pre').after(slideAdd) // 7. 해당속성 바로 뒤에 추가
+        btnArr.map((value) => { // btnNum배열에 있는 값을 활용해 하나씩 준비된 '객체를 담는 변수slideAdd'에 차례로 넣는다.
+            slideAdd += `<button class="btn btn${value}" value="${value}" type="button">버튼${value}</button>`
+        })
 
-            $('.btn').click(function(){ // 8. 클릭한 버튼의 value가져오기
-                let btnNum = $(this).val()
-                slideStart(btnNum) // 9. slideStart함수로 btnNum값 넘기기
-            })
+        $('#pre').after(slideAdd) // 해당속성 바로 뒤에 추가
 
-            function slideStart(receiveNum){ // 10. 받은 btnNum값으로 슬라이드 실행함수 만들기
-                document.querySelector('.container').style.transform
-                = `translate(-${receiveNum*100}vw)` // 11. 만약 0번버튼을 누르면 0값이 receiveNum에 들어와 -100vw가 실행이 된다.
+
+        let pageBtn = document.querySelectorAll('.btn')
+        $('.btn').click(function () { // 클릭한 버튼의 value가져오기
+            let btnNum = $(this).val()
+            document.querySelector('.container').style.transform = `translate(-${btnNum * 100}vw)`
+            pageBtn.forEach((i)=> i.classList.remove('on'))
+            pageBtn[btnNum].classList.add('on')
+        })
+
+        let reactWidth = document.querySelector('.container').clientWidth
+        let reactLength = reactWidth / btnCount
+        console.log(reactLength)
+
+        
+        
+        let a = 0
+        document.querySelector('.btn').classList.add('on')
+        $('#next').click(function () { // 클릭한 버튼의 value가져오기
+            if (reactLength * a < reactLength * (btnCount - 1)) {
+                a++
+                document.querySelector('.container').style.transform = `translate(-${reactLength*a}px)`
+                pageBtn.forEach((i)=> i.classList.remove('on'))
+                pageBtn[a].classList.add('on')
             }
+            console.log(reactLength * a)
+        })
 
+        $('#pre').click(function () { // 클릭한 버튼의 value가져오기
+            if (reactLength * a != 0) {
+                a--
+                document.querySelector('.container').style.transform = `translate(-${reactLength*a}px)`
+                pageBtn.forEach((i)=> i.classList.remove('on'))
+                pageBtn[a].classList.add('on')
+            }
+        })
+
+        function start() {
+            if (reactLength * a < reactLength * (btnCount - 1)) {
+                a++
+                document.querySelector('.container').style.transform = `translate(-${reactLength*a}px)`
+                pageBtn.forEach((i)=> i.classList.remove('on'))
+                pageBtn[a].classList.add('on')
+            } else {
+                return a = -1
+            }
+        }
+
+        // setInterval(start,1000)
+        
     </script>
 </body>
 
