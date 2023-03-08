@@ -37,6 +37,7 @@
             <div class="inner"><img src="./img/11.jpg" alt=""></div>
             <div class="inner"><img src="./img/12.jpg" alt=""></div>
             <div class="inner"><img src="./img/13.jpg" alt=""></div>
+            <div class="inner"><img src="./img/14.jpg" alt=""></div>
         </div>
     </div>
 
@@ -45,8 +46,8 @@
 
     <script>
         let slideAdd = '' // 버튼 속성 담는 그릇
-        let btnArr = [] // 버튼 갯수를 받을 배열
-        let btnCount = 4 // 버튼 갯수 설정
+        let btnArr = [] // 2. 버튼 갯수를 받을 배열
+        let btnCount = 4 // 1. 버튼 갯수 설정
 
         // container길이 설정
         document.querySelector('.container').style.width = `${btnCount * 100}vw`
@@ -74,17 +75,31 @@
 
         let a = 0
         $('#next').click(function () { // 클릭한 버튼의 value가져오기
-            a++
-            document.querySelector('.container').style.transform = `translate(-${reactLength*a}px)`
-            let d = reactLength*a
+            if (reactLength * a < reactLength * (btnCount - 1)) {
+                a++
+                document.querySelector('.container').style.transform = `translate(-${reactLength*a}px)`
+            }
+            console.log(reactLength * a)
         })
 
-       
+        $('#pre').click(function () { // 클릭한 버튼의 value가져오기
+            if (reactLength * a != 0) {
+                a--
+                document.querySelector('.container').style.transform = `translate(-${reactLength*a}px)`
+                console.log(reactLength * a)
+            }
+        })
 
+        function start() {
+            if (reactLength * a < reactLength * (btnCount - 1)) {
+                a++
+                document.querySelector('.container').style.transform = `translate(-${reactLength*a}px)`
+            } else {
+                return a=0
+            }
+        }
 
-
-       
-
+        // setInterval(start,1000)
         
     </script>
 </body>
