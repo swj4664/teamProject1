@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Document</title>
+</head>
+<style>
+    .on {
+        display: block !important;
+    }
+</style>
+
+<body>
+
+    <div id="map" style="width:60%;height: 500px;"></div>
+    <select name="" id="sido"></select>
+    <select name="" id="gugun" style="display: none;"></select>
+    <script src="./jquery-1.12.4.min.js"></script>
+    <script type="text/javascript"
+        src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=efe73cb24df832861f0ab6d9ad042bcc&libraries=services,clusterer,drawing"></script>
+    <script>
+
+
+
+
+        //------------------지도 생성 ------------------------------
+        var map = new kakao.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
+            center: new kakao.maps.LatLng(36.2683, 127.6358), // 지도의 중심좌표 
+            level: 13 // 지도의 확대 레벨 
+        });
+
+        var clusterer = new kakao.maps.MarkerClusterer({
+            map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+            averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+            minLevel: 10 // 클러스터 할 최소 지도 레벨 
+        });
+
+
+
+        var flag = true
+        function panTo(a, b) {
+            // 이동할 위도 경도 위치를 생성합니다 
+            var moveLatLon = new kakao.maps.LatLng(a, b);
+            // 지도 중심을 부드럽게 이동시킵니다
+            // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+            map.panTo(moveLatLon);
+            if(flag){
+                zoomIn()
+                flag = false
+            }
+        }
+
+        
+
+        function zoomIn() {
+            // 현재 지도의 레벨을 얻어옵니다
+            var level = map.getLevel();
+
+            // 지도를 1레벨 내립니다 (지도가 확대됩니다)
+            map.setLevel(level-3);
+        }
+
+        var global = []
+
+        $.get("info.json", function (data) {
+            console.log(data)
+            global = data.records
+            useData(data.records)
+            useKakao(data.records)
+        });
+
+        function useKakao(data) {
+            var markers = data.map(function (i) {
+         
+                return new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(i.lat, i.lng)
+                });
+            });
+            clusterer.addMarkers(markers);
+        }
+
+  
+        var markL = []
+        function cityKakao(city) {
+            let localName = global.filter((a) => {
+                let sidoList = a.sidoName.split(' ')
+                return sidoList[0] === city
+            })
+            for(let i=0; i < localName.length; i++){
+                markL.push({lat:localName[i].lat,lng:localName[i].lng})
+            }
+            panTo(localName[0].lat, localName[0].lng)
+            useKakao(markL)
+        }
+
+
+        function useData(globalData) {
+            let list = globalData.map((a, b) => {
+                let sidoList = a.sidoName.split(' ')
+                return sidoList[0]
+            })
+
+            let cityName = list.filter((a, b) => {
+                return list.indexOf(a) === b
+            })
+
+
+            let cityIndex = list.filter((a, b) => list.indexOf(a) === b);
+            cityIndex.sort()
+            console.log(cityIndex)
+
+            let option = ''
+            cityIndex.map((value) => {
+                option += `<option value="${value}">${value}</option>`
+            })
+            $('#sido').html(option)
+        }
+
+
+        $('#sido').change(function () {
+            let city = $(this).val()
+            cityKakao(city)
+        })
+
+
+
+    </script>
+
+</body>
+
+</html>
