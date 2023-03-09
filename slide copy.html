@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <title>Document</title>
+    <style>
+        .slide {
+            width: 100vw;
+            position: relative;
+        }
+
+        .container {
+            position: absolute;
+            height: 50vw;
+            overflow: hidden;
+        }
+
+
+        .container img {
+            width: 100vw;
+            float: left;
+        }
+
+        .btnG {
+            position: absolute;
+        }
+
+        .btnG .btn.on {
+            background-color: yellow;
+        }
+    </style>
+</head>
+
+
+<body style="margin:0">
+    <div class="slide">
+        <div class="container">
+            <img src="./img/11.jpg" alt="">
+            <img src="./img/12.jpg" alt="">
+            <img src="./img/13.jpg" alt="">
+            <img src="./img/14.jpg" alt="">
+        </div>
+        <div class="btnG">
+            <button id="pre" type="button" onclick="pre()">pre</button>
+            <button id="next" type="button" onclick="next()">next</button>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        let slideAdd = '' // 버튼 속성 담는 그릇
+        let btnArr = [] // 2. 버튼 갯수를 받을 배열
+        let btnCount = 4 // 1. 버튼 갯수 설정
+
+        // container길이 설정
+        document.querySelector('.container').style.width = `${(btnCount + 2) * 100}vw`
+
+        // 버튼 갯수 배열에 넣는 공식
+        for (let i = 0; i < btnCount; i++) {
+            let Num = [i]
+            btnArr.push(Num) // 하나씩 준비된 btnNum배열 변수에 넣는다.
+        }
+
+        // btnNum배열에 있는 값을 slideAdd에 차례로 넣는다.
+        btnArr.map((value) => {
+            slideAdd += `<button class="btn btn${value}" value="${value}" type="button" onclick="btn()">버튼${value}</button>`
+        })
+        $('#pre').after(slideAdd)
+
+        //클론 후 슬라이드 앞 뒤에 붙이기
+        let container = document.querySelector('.container')
+        let allImg = document.querySelectorAll('img')
+        let cloneFirst = allImg[0].cloneNode(true); // 요소 복사
+        let cloneLast = allImg[allImg.length - 1].cloneNode(true);
+        container.insertBefore(cloneLast, allImg[0]);
+        container.appendChild(cloneFirst);
+
+        // 선택된 버튼에 색상을 입히기 위한 변수 준비
+        let pageBtn = document.querySelectorAll('.btn')
+
+        // 클릭한 버튼의 value가져와 translate적용
+        function btn() {
+            let btnNum = event.target.value
+            document.querySelector('.container').style.transform = `translate(-${btnNum * 100}vw)`
+            pageBtn.forEach((i) => i.classList.remove('on'))
+            pageBtn[btnNum].classList.add('on')
+        }
+
+        let reactWidth = document.querySelector('.container').clientWidth
+        let reactLength = reactWidth / (btnCount + 2)
+        console.log(reactLength)
+
+
+
+        let a = 0
+        document.querySelector('.btn').classList.add('on')
+        document.querySelector('.container').style.left = `-${reactLength}px`
+
+        // 좌클릭버튼
+        function next() { // 클릭한 버튼의 value가져오기
+            // event.preventDefault();
+            if (reactLength * a < reactLength * (btnCount)) {
+                a++
+                container.style.transition = `all .5s`;
+                document.querySelector('.container').style.transform = `translate(-${reactLength * a}px)`
+                // pageBtn.forEach((i) => i.classList.remove('on'))
+                // pageBtn[a].classList.add('on')
+            }
+            //무한슬라이드
+            if (reactLength * a == reactLength * (btnCount)) {
+                a = 4
+                setTimeout(() => {
+                    container.style.transition = `0s`;
+                    container.style.transform = `translateX(0px)`;
+                }, 500);
+                container.style.transition = `all .5s`;
+                a = 0
+            }
+
+        }
+
+        // 우클릭버튼
+        function pre() { // 클릭한 버튼의 value가져오기
+            if (reactLength * a != 0) {
+                a--
+                container.style.transition = `all .5s`;
+                document.querySelector('.container').style.transform = `translate(-${reactLength * a}px)`
+                // pageBtn.forEach((i) => i.classList.remove('on'))
+                // pageBtn[a].classList.add('on')
+            }
+            // 무한슬라이드
+            if (reactLength * a == reactLength * (btnCount)) {
+                a = 4
+                setTimeout(() => {
+                    container.style.transition = `0s`;
+                    container.style.transform = `translateX(0px)`;
+                }, 500);
+                container.style.transition = `all .5s`;
+                a = 0
+            }
+        }
+
+        // 자동실행
+        function start() {
+            if (reactLength * a < reactLength * (btnCount)) {
+                a++
+                document.querySelector('.container').style.transform = `translate(-${reactLength * a}px)`
+                pageBtn.forEach((i) => i.classList.remove('on'))
+                pageBtn[a].classList.add('on')
+            } else {
+                pageBtn.forEach((i) => i.classList.remove('on'))
+                pageBtn[0].classList.add('on')
+                document.querySelector('.container').style.transform = `translate(0px)`
+                return a = 0
+            }
+        }
+
+        // setInterval(start, 2000)
+
+    </script>
+</body>
+
+</html>
