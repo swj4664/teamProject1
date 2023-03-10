@@ -94,7 +94,6 @@
 
         let reactWidth = document.querySelector('.container').clientWidth
         let reactLength = reactWidth / (btnCount + 2)
-        console.log(reactLength)
 
 
 
@@ -102,19 +101,25 @@
         document.querySelector('.btn').classList.add('on')
         document.querySelector('.container').style.left = `-${reactLength}px`
 
-        // 좌클릭버튼
+        // 우클릭버튼
         function next() { // 클릭한 버튼의 value가져오기
             // event.preventDefault();
             if (reactLength * a < reactLength * (btnCount)) {
                 a++
                 container.style.transition = `all .5s`;
                 document.querySelector('.container').style.transform = `translate(-${reactLength * a}px)`
-                // pageBtn.forEach((i) => i.classList.remove('on'))
-                // pageBtn[a].classList.add('on')
+                if(reactLength * a < reactLength * (btnCount)){
+                    pageBtn.forEach((i) => i.classList.remove('on'))
+                    pageBtn[a].classList.add('on')
+                } else {
+                    pageBtn[btnCount-1].classList.remove('on')
+                    pageBtn[0].classList.add('on')
+                }
+               
             }
             //무한슬라이드
             if (reactLength * a == reactLength * (btnCount)) {
-                a = 4
+                a = btnCount
                 setTimeout(() => {
                     container.style.transition = `0s`;
                     container.style.transform = `translateX(0px)`;
@@ -125,24 +130,33 @@
 
         }
 
-        // 우클릭버튼
+        // 좌클릭버튼
         function pre() { // 클릭한 버튼의 value가져오기
-            if (reactLength * a != 0) {
+            console.log('a')
+            if (reactLength * a > -1) {
                 a--
                 container.style.transition = `all .5s`;
                 document.querySelector('.container').style.transform = `translate(-${reactLength * a}px)`
-                // pageBtn.forEach((i) => i.classList.remove('on'))
-                // pageBtn[a].classList.add('on')
+                // if(reactLength * a < reactLength * (btnCount)){
+                //     pageBtn.forEach((i) => i.classList.remove('on'))
+                //     pageBtn[a].classList.add('on')
+                //     console.log('length:'+ reactLength * a)
+                // } else {
+                //     pageBtn[0].classList.remove('on')
+                //     pageBtn[btnCount-1].classList.add('on')
+                // }
+                console.log('a:'+ a)
             }
             // 무한슬라이드
-            if (reactLength * a == reactLength * (btnCount)) {
-                a = 4
+            if (reactLength * a == -reactLength) {
+                container.style.transform = `translateX(${reactLength}px)`;
                 setTimeout(() => {
                     container.style.transition = `0s`;
-                    container.style.transform = `translateX(0px)`;
+                    container.style.transform = `translateX(-${reactLength*(btnCount-1)}px)`;
+                    console.log('asdf')
                 }, 500);
                 container.style.transition = `all .5s`;
-                a = 0
+                a = btnCount
             }
         }
 
