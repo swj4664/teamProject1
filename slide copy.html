@@ -10,6 +10,7 @@
     <style>
         .slide {
             width: 100vw;
+            height: 50vw;
             position: relative;
         }
 
@@ -19,18 +20,49 @@
             overflow: hidden;
         }
 
+        /* .container .innerSlide {
+            width: 500px;
+            height: 500px
+        } */
 
-        .container img {
+        .container .innerSlide img {
             width: 100vw;
             float: left;
         }
 
         .btnG {
+            top: 88%;
+            left: 50%;
+            height: 40px;
+            transform: translateX(-50%);
             position: absolute;
         }
 
+        .btnG .btn {
+            cursor: pointer;
+            border: none;
+            padding: 5px;
+            margin: 3px;
+            border-radius: 10px;
+            background-color: rgba(255,255,255, .4);
+        }
+
+        
+
+        
+
         .btnG .btn.on {
-            background-color: yellow;
+            background-color: rgba(255,255,255, .9);
+        }
+
+        .btnG .moveBtn {
+            cursor: pointer;
+            font-size: 20px;
+            text-shadow: 2px 2px 2px rgb(51, 51, 51);
+            width: 40px;
+            color: white;
+            border: none;
+            background-color: rgba(255,255,255, 0);
         }
     </style>
 </head>
@@ -39,14 +71,18 @@
 <body style="margin:0">
     <div class="slide">
         <div class="container">
-            <img src="./img/11.jpg" alt="">
+            <div class="innerSlide slide1"><img src="./img/11.jpg" alt=""></div>
+            <div class="innerSlide slide2"><img src="./img/12.jpg" alt=""></div>
+            <div class="innerSlide slide3"><img src="./img/13.jpg" alt=""></div>
+            <div class="innerSlide slide4"><img src="./img/14.jpg" alt=""></div>
+            <!-- <img src="./img/11.jpg" alt="">
             <img src="./img/12.jpg" alt="">
             <img src="./img/13.jpg" alt="">
-            <img src="./img/14.jpg" alt="">
+            <img src="./img/14.jpg" alt=""> -->
         </div>
         <div class="btnG">
-            <button id="pre" type="button" onclick="pre()">pre</button>
-            <button id="next" type="button" onclick="next()">next</button>
+            <button class="moveBtn" id="pre" type="button" onclick="pre()">pre</button>
+            <button class="moveBtn" id="next" type="button" onclick="next()">next</button>
         </div>
     </div>
 
@@ -69,33 +105,37 @@
 
         // btnNum배열에 있는 값을 slideAdd에 차례로 넣는다.
         btnArr.map((value) => {
-            slideAdd += `<button class="btn btn${value}" value="${value}" type="button" onclick="btn()">버튼${value}</button>`
+            slideAdd +=
+                `<button class="btn btn${value}" value="${value}" type="button" onclick="btn()"></button>`
         })
         $('#pre').after(slideAdd)
 
         //클론 후 슬라이드 앞 뒤에 붙이기
         let container = document.querySelector('.container')
-        let allImg = document.querySelectorAll('img')
-        let cloneFirst = allImg[0].cloneNode(true); // 요소 복사
-        let cloneLast = allImg[allImg.length - 1].cloneNode(true);
-        container.insertBefore(cloneLast, allImg[0]);
+        let allSlide = document.querySelectorAll('.innerSlide')
+        let cloneFirst = allSlide[0].cloneNode(true); // 요소 복사
+        let cloneLast = allSlide[allSlide.length - 1].cloneNode(true);
+        container.insertBefore(cloneLast, allSlide[0]);
         container.appendChild(cloneFirst);
 
         // 선택된 버튼에 색상을 입히기 위한 변수 준비
         let pageBtn = document.querySelectorAll('.btn')
 
         // 클릭한 버튼의 value가져와 translate적용
+        let btnValue = 0
+
         function btn() {
+            container.style.transition = `all .5s`;
             let btnNum = event.target.value
             document.querySelector('.container').style.transform = `translate(-${btnNum * 100}vw)`
+            btnValue = btnNum
             pageBtn.forEach((i) => i.classList.remove('on'))
             pageBtn[btnNum].classList.add('on')
+
         }
 
         let reactWidth = document.querySelector('.container').clientWidth
         let reactLength = reactWidth / (btnCount + 2)
-
-
 
         let a = 0
         document.querySelector('.btn').classList.add('on')
@@ -104,51 +144,50 @@
         // 우클릭버튼
         function next() { // 클릭한 버튼의 value가져오기
             // event.preventDefault();
-            if (reactLength * a < reactLength * (btnCount)) {
-                a++
+
+            if (reactLength * btnValue < reactLength * (btnCount)) {
+                btnValue++
                 container.style.transition = `all .5s`;
-                document.querySelector('.container').style.transform = `translate(-${reactLength * a}px)`
-                if(reactLength * a < reactLength * (btnCount)){
+                document.querySelector('.container').style.transform = `translate(-${reactLength * btnValue}px)`
+                if (reactLength * btnValue < reactLength * (btnCount)) {
                     pageBtn.forEach((i) => i.classList.remove('on'))
-                    pageBtn[a].classList.add('on')
+                    pageBtn[btnValue].classList.add('on')
                 } else {
-                    pageBtn[btnCount-1].classList.remove('on')
+                    pageBtn[btnCount - 1].classList.remove('on')
                     pageBtn[0].classList.add('on')
                 }
-               
             }
+
             //무한슬라이드
-            if (reactLength * a == reactLength * (btnCount)) {
-                a = btnCount
+            if (reactLength * btnValue == reactLength * (btnCount)) {
+                btnValue = btnCount
                 setTimeout(() => {
                     container.style.transition = `0s`;
                     container.style.transform = `translateX(0px)`;
                 }, 500);
                 container.style.transition = `all .5s`;
-                a = 0
+                btnValue = 0
             }
 
         }
 
         // 좌클릭버튼
         function pre() { // 클릭한 버튼의 value가져오기
-            console.log('a')
             if (reactLength * a > -1) {
-                a--
+                btnValue--
                 container.style.transition = `all .5s`;
-                document.querySelector('.container').style.transform = `translate(-${reactLength * a}px)`
-                // if(reactLength * a < reactLength * (btnCount)){
-                //     pageBtn.forEach((i) => i.classList.remove('on'))
-                //     pageBtn[a].classList.add('on')
-                //     console.log('length:'+ reactLength * a)
-                // } else {
-                //     pageBtn[0].classList.remove('on')
-                //     pageBtn[btnCount-1].classList.add('on')
-                // }
-                console.log('a:'+ a)
+                document.querySelector('.container').style.transform = `translate(-${reactLength * btnValue}px)`
+                if (reactLength * btnValue > -1) {
+                    pageBtn.forEach((i) => i.classList.remove('on'))
+                    pageBtn[btnValue].classList.add('on')
+                    console.log('length:' + reactLength * btnValue)
+                } else {
+                    pageBtn[0].classList.remove('on')
+                    pageBtn[btnCount - 1].classList.add('on')
+                }
             }
             // 무한슬라이드
-            if (reactLength * a == -reactLength) {
+            if (reactLength * btnValue == -reactLength) {
                 container.style.transform = `translateX(${reactLength}px)`;
                 setTimeout(() => {
                     container.style.transition = `0s`;
@@ -156,27 +195,38 @@
                     console.log('asdf')
                 }, 500);
                 container.style.transition = `all .5s`;
-                a = btnCount
+                btnValue = btnCount - 1
             }
         }
 
         // 자동실행
         function start() {
-            if (reactLength * a < reactLength * (btnCount)) {
-                a++
-                document.querySelector('.container').style.transform = `translate(-${reactLength * a}px)`
-                pageBtn.forEach((i) => i.classList.remove('on'))
-                pageBtn[a].classList.add('on')
-            } else {
-                pageBtn.forEach((i) => i.classList.remove('on'))
-                pageBtn[0].classList.add('on')
-                document.querySelector('.container').style.transform = `translate(0px)`
-                return a = 0
+            if (reactLength * btnValue < reactLength * (btnCount)) {
+                btnValue++
+                container.style.transition = `all .5s`;
+                document.querySelector('.container').style.transform = `translate(-${reactLength * btnValue}px)`
+                if (reactLength * btnValue < reactLength * (btnCount)) {
+                    pageBtn.forEach((i) => i.classList.remove('on'))
+                    pageBtn[btnValue].classList.add('on')
+                } else {
+                    pageBtn[btnCount - 1].classList.remove('on')
+                    pageBtn[0].classList.add('on')
+                }
+            }
+
+            //무한슬라이드
+            if (reactLength * btnValue == reactLength * (btnCount)) {
+                btnValue = btnCount
+                setTimeout(() => {
+                    container.style.transition = `0s`;
+                    container.style.transform = `translateX(0px)`;
+                }, 500);
+                container.style.transition = `all .5s`;
+                btnValue = 0
             }
         }
 
         // setInterval(start, 2000)
-
     </script>
 </body>
 
