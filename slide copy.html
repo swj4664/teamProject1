@@ -8,94 +8,236 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <title>Document</title>
     <style>
-        .slide {
-            width: 100vw;
-            height: 50vw;
-            position: relative;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            border: none;
         }
 
-        .container {
+        li {
+            list-style: none;
+        }
+
+        /* 로그인 */
+
+        .login {
+            position: fixed;
+            top: 40px;
+            right: 50px;
+            z-index: 99;
+        }
+
+        .login .loginBtn {
+            cursor: pointer;
+            font-size: 15px;
+            width: 100px;
+            height: 35px;
+            border-radius: 18px;
+            padding-left: 25px;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            font-weight: 600;
+        }
+
+        .login .loginBtn>img {
             position: absolute;
-            height: 50vw;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            top: 0;
+            left: 0;
+            padding: 3px;
+            font-size: 15px;
+            border-radius: 25px;
+            background-color: white;
+            color: white;
+        }
+
+
+        /* 섹션 */
+
+        #wrap .section {
+            width: 100vw;
+            height: 100vh;
+            background-position: right center;
+            background-size: cover;
+            position: relative;
             overflow: hidden;
         }
 
-        /* .container .innerSlide {
-            width: 500px;
-            height: 500px
-        } */
+        #wrap #sect1 {
+            background-image: url(./img/Rectangle\ 3.png)
+        }
 
-        .container .innerSlide img {
+        #wrap #sect2 {
+            background-image: url(./img/Rectangle\ 3.png)
+        }
+
+
+        #wrap .whiteBg {
             width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, .4);
+            position: absolute;
+        }
+
+        #wrap #innerWrap {
+            position: absolute;
+            top: 50%;
+            left: 18%;
+            transform: translateY(-50%);
+        }
+
+
+
+        #wrap .title {
+            position: absolute;
+            width: 350px;
+            display: inline-block;
+            text-align: center;
+            margin-left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+        }
+
+        #wrap .title p {
+            font-size: 60px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 3px 3px 3px rgba(0, 0, 0, .2);
+        }
+
+        #wrap .title .clickPlz {
+            padding: 15px;
+            margin: 30px 10px 0px 10px;
+            border-radius: 40px;
+            cursor: pointer;
+            background-color: white;
+            font-size: 18px;
+            font-weight: 900;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, .2);
+        }
+
+        #wrap #innerWrap .slide {
+            display: inline-block;
+            width: 450px;
+            height: 540px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 5px 5px 20px 5px rgba(0, 0, 0, .2);
+        }
+
+        #wrap #innerWrap .slide .container {
+            position: absolute;
+        }
+
+        #wrap #innerWrap .slide .container .innerSlide img {
             float: left;
         }
 
-        .btnG {
-            top: 88%;
+        #wrap #innerWrap .slide .btnG {
+            top: 92%;
             left: 50%;
             height: 40px;
             transform: translateX(-50%);
             position: absolute;
         }
 
-        .btnG .btn {
+        #wrap #innerWrap .slide .btnG .btn {
             cursor: pointer;
             border: none;
             padding: 5px;
-            margin: 3px;
+            margin: 5px;
             border-radius: 10px;
-            background-color: rgba(255,255,255, .4);
+            background-color: rgba(255, 255, 255, .4);
         }
 
-        
 
-        
-
-        .btnG .btn.on {
-            background-color: rgba(255,255,255, .9);
+        #wrap #innerWrap .slide .btnG .btn.on {
+            background-color: rgba(255, 255, 255, .9);
         }
 
-        .btnG .moveBtn {
+        #wrap #innerWrap .slide .btnG .moveBtn {
             cursor: pointer;
             font-size: 20px;
             text-shadow: 2px 2px 2px rgb(51, 51, 51);
             width: 40px;
             color: white;
             border: none;
-            background-color: rgba(255,255,255, 0);
+            background-color: rgba(255, 255, 255, 0);
         }
     </style>
 </head>
 
 
 <body style="margin:0">
-    <div class="slide">
-        <div class="container">
-            <div class="innerSlide slide1"><img src="./img/11.jpg" alt=""></div>
-            <div class="innerSlide slide2"><img src="./img/12.jpg" alt=""></div>
-            <div class="innerSlide slide3"><img src="./img/13.jpg" alt=""></div>
-            <div class="innerSlide slide4"><img src="./img/14.jpg" alt=""></div>
-            <!-- <img src="./img/11.jpg" alt="">
-            <img src="./img/12.jpg" alt="">
-            <img src="./img/13.jpg" alt="">
-            <img src="./img/14.jpg" alt=""> -->
-        </div>
-        <div class="btnG">
-            <button class="moveBtn" id="pre" type="button" onclick="pre()">pre</button>
-            <button class="moveBtn" id="next" type="button" onclick="next()">next</button>
-        </div>
+
+    <div class="login">
+        <button class="loginBtn" type="button">
+            <p class="logText">로그인</p>
+            <img class="user" src="./img/user.png" alt="">
+        </button>
+    </div>
+    <div id="wrap">
+        <section id="sect1" class="section">
+            <div class="whiteBg"></div>
+            <div id="innerWrap">
+                <div class="slide">
+                    <div class="container container1">
+                        <div class="innerSlide innerSlide1"><img src="./img/seoul1.png" alt=""></div>
+                        <div class="innerSlide innerSlide1"><img src="./img/busan1.png" alt=""></div>
+                        <div class="innerSlide innerSlide1"><img src="./img/seoul1.png" alt=""></div>
+                        <div class="innerSlide innerSlide1"><img src="./img/busan1.png" alt=""></div>
+                    </div>
+                    <div class="btnG">
+                        <button class="moveBtn" id="pre" type="button" onclick="pre()">pre</button>
+                        <button class="moveBtn" id="next" type="button" onclick="next()">next</button>
+                    </div>
+                </div>
+                <div class="title">
+                    <p>서울 Seoul</p>
+                    <li class="clickPlz">이미지를 클릭하세요</li>
+                </div>
+            </div>
+        </section>
+        <section id="sect2" class="section">
+            <div class="whiteBg"></div>
+            <div id="innerWrap">
+                <div class="slide">
+                    <div class="container container2">
+                        <div class="innerSlide innerSlide2"><img src="./img/seoul1.png" alt=""></div>
+                        <div class="innerSlide innerSlide2"><img src="./img/busan1.png" alt=""></div>
+                        <div class="innerSlide innerSlide2"><img src="./img/seoul1.png" alt=""></div>
+                        <div class="innerSlide innerSlide2"><img src="./img/busan1.png" alt=""></div>
+                    </div>
+                    <div class="btnG">
+                        <button class="moveBtn" id="pre2" type="button" onclick="pre2()">pre</button>
+                        <button class="moveBtn" id="next2" type="button" onclick="next2()">next</button>
+                    </div>
+                </div>
+                <div class="title">
+                    <p>부산 Busan</p>
+                    <li class="clickPlz">이미지를 클릭하세요</li>
+                </div>
+            </div>
+        </section>
     </div>
 
 
 
 
     <script>
+
+        // 슬라이드 시작
         let slideAdd = '' // 버튼 속성 담는 그릇
         let btnArr = [] // 2. 버튼 갯수를 받을 배열
         let btnCount = 4 // 1. 버튼 갯수 설정
 
         // container길이 설정
-        document.querySelector('.container').style.width = `${(btnCount + 2) * 100}vw`
+        document.querySelector('.container').style.width = `${(btnCount + 2) * 620}px`
 
         // 버튼 갯수 배열에 넣는 공식
         for (let i = 0; i < btnCount; i++) {
@@ -108,7 +250,9 @@
             slideAdd +=
                 `<button class="btn btn${value}" value="${value}" type="button" onclick="btn()"></button>`
         })
+
         $('#pre').after(slideAdd)
+        $('#pre2').after(slideAdd)
 
         //클론 후 슬라이드 앞 뒤에 붙이기
         let container = document.querySelector('.container')
@@ -124,27 +268,26 @@
         // 클릭한 버튼의 value가져와 translate적용
         let btnValue = 0
 
-        function btn() {
-            container.style.transition = `all .5s`;
-            let btnNum = event.target.value
-            document.querySelector('.container').style.transform = `translate(-${btnNum * 100}vw)`
-            btnValue = btnNum
-            pageBtn.forEach((i) => i.classList.remove('on'))
-            pageBtn[btnNum].classList.add('on')
-
-        }
-
         let reactWidth = document.querySelector('.container').clientWidth
         let reactLength = reactWidth / (btnCount + 2)
 
+        function btn() {
+            container.style.transition = `all .5s`;
+            let btnNum = event.target.value
+            document.querySelector('.container').style.transform = `translate(-${btnNum * reactLength}px)`
+            btnValue = btnNum
+            pageBtn.forEach((i) => i.classList.remove('on'))
+            pageBtn[btnNum].classList.add('on')
+        }
+
         let a = 0
         document.querySelector('.btn').classList.add('on')
+
+        // 슬라이드 시작 위치
         document.querySelector('.container').style.left = `-${reactLength}px`
 
         // 우클릭버튼
         function next() { // 클릭한 버튼의 value가져오기
-            // event.preventDefault();
-
             if (reactLength * btnValue < reactLength * (btnCount)) {
                 btnValue++
                 container.style.transition = `all .5s`;
@@ -157,7 +300,6 @@
                     pageBtn[0].classList.add('on')
                 }
             }
-
             //무한슬라이드
             if (reactLength * btnValue == reactLength * (btnCount)) {
                 btnValue = btnCount
@@ -168,8 +310,8 @@
                 container.style.transition = `all .5s`;
                 btnValue = 0
             }
-
         }
+
 
         // 좌클릭버튼
         function pre() { // 클릭한 버튼의 value가져오기
@@ -191,7 +333,7 @@
                 container.style.transform = `translateX(${reactLength}px)`;
                 setTimeout(() => {
                     container.style.transition = `0s`;
-                    container.style.transform = `translateX(-${reactLength*(btnCount-1)}px)`;
+                    container.style.transform = `translateX(-${reactLength * (btnCount - 1)}px)`;
                     console.log('asdf')
                 }, 500);
                 container.style.transition = `all .5s`;
@@ -226,7 +368,51 @@
             }
         }
 
-        // setInterval(start, 2000)
+        setInterval(start, 3000)
+
+        // 슬라이드 끝
+
+        // 로그인버튼
+
+        let login = document.querySelector('.login')
+        let user = document.querySelector('.user')
+        let loginBtn = document.querySelector('.loginBtn')
+        let logText = document.querySelector('.logText')
+
+        login.addEventListener('mouseover', function (event) {
+            user.style.transform = 'translate(65px)'
+            user.style.transition = 'all .3s'
+            loginBtn.style.background = 'rgb(88, 67, 206)'
+            loginBtn.style.paddingLeft = '0px'
+            loginBtn.style.paddingRight = '25px'
+            // loginBtn.style.color = 'rgb(88, 67, 206)'
+            loginBtn.style.transition = 'all .3s'
+        })
+        login.addEventListener('mouseleave', function (event) {
+            user.style.transform = 'translate(0px)'
+            user.style.transition = 'all .3s'
+            loginBtn.style.background = 'rgba(0, 0, 0, 0.4)'
+            loginBtn.style.paddingLeft = '25px'
+            loginBtn.style.paddingRight = '0px'
+            loginBtn.style.transition = 'all .3s'
+            // loginBtn.style.color = 'white'
+        })
+
+        
+        // 섹션 스크롤
+        let contain = document.querySelector('.container').clientHeight
+        let wrapH = document.querySelector('#wrap').clientHeight
+        let containH = wrapH/contain
+        window.addEventListener('scroll', function () {
+            if(window.scrollY > 200){
+            }
+            // window.scrollTo(0, 100)
+            // window.scrollBy(0, 100) 
+        });
+
+
+
+
     </script>
 </body>
 
